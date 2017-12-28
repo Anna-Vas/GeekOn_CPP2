@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QPaintEvent>
 #include <QMouseEvent>
+#include <QList>
 #include "ball.h"
 
 namespace Ui {
@@ -15,7 +16,8 @@ class Widget : public QWidget
 {
     Q_OBJECT
     QTimer timer;
-    Ball * balls[5];
+    //Ball * balls[5];
+    QList<Ball*> balls;
 public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();

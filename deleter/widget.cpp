@@ -10,8 +10,11 @@ Widget::Widget(QWidget *parent) :
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    for (int i=0; i<NUM; i++)
-        balls[i] = new Ball(width(), height());
+//    QList<Ball*>::iterator iter = balls.begin();
+//    for (iter; iter!=balls.end(); iter++)
+//        *iter = new Ball(width(), height());
+    for(int i=0; i<NUM; i++)
+        balls.push_back(new Ball(width(), height()));
     connect(&timer, SIGNAL(timeout()), this, SLOT(moveAll()));
     timer.start(40);
 }
@@ -24,13 +27,13 @@ Widget::~Widget()
 void Widget::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
-    for (int i=0; i<NUM; i++)
+    for (int i=0; i!=balls.size(); i++)
         balls[i]->draw(painter);
 }
 
 bool Widget::is_alive()
 {
-    if(NUM == 0)
+    if(balls.size() == 0)
         return false;
     return true;
 }
@@ -38,20 +41,22 @@ bool Widget::is_alive()
 void Widget::mousePressEvent(QMouseEvent *event)
 {
     int x = event->x();
-    int y = event->y();
-    int fooor = NUM;
-    for(int i=0; i<fooor; i++){
-        if(balls[i]->isCol(x, y)){
-            delete balls[i];
-            NUM--;
-        }
+    int y = event->y();    
+    QList<Ball*>::iterator iter = balls.begin();
+    while(iter!=balls.end()){
+        if((*iter)->isCol(x, y))
+            iter = balls.erase(iter);
+        else
+            iter++;
     }
 }
 
 void Widget::moveAll()
 {
-    for (int i=0; i<NUM; i++){
-        for(int j=i+1; j< NUM; j++){
+    if(rand()%50 == 1)
+        balls.push_back(new Ball(width(), height()));
+    for (int i=0; i<balls.size(); i++){
+        for(int j=i+1; j< balls.size(); j++){
            if(balls[i]->isCol(balls[j]))
            {
                balls[i]->move(width() * -1, height() * -1);
