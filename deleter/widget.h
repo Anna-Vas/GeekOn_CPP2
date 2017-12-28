@@ -25,6 +25,8 @@ protected:
     void paintEvent(QPaintEvent * e);
     bool is_alive();
     void mousePressEvent(QMouseEvent *event);
+    void stop();
+    void start();
 protected slots:
     void moveAll();
 private:

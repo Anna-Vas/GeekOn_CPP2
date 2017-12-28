@@ -10,9 +10,8 @@ Widget::Widget(QWidget *parent) :
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
-//    QList<Ball*>::iterator iter = balls.begin();
-//    for (iter; iter!=balls.end(); iter++)
-//        *iter = new Ball(width(), height());
+    QMessageBox::warning(this, tr("Game start"),
+                         tr("You'll win!11!"));
     for(int i=0; i<NUM; i++)
         balls.push_back(new Ball(width(), height()));
     connect(&timer, SIGNAL(timeout()), this, SLOT(moveAll()));
@@ -51,6 +50,18 @@ void Widget::mousePressEvent(QMouseEvent *event)
     }
 }
 
+void Widget::stop()
+{
+    timer.stop();
+    QMessageBox::warning(this, tr("Game over"),
+                         tr("You won!11!"));
+}
+
+void Widget::start()
+{
+
+}
+
 void Widget::moveAll()
 {
     if(rand()%50 == 1)
@@ -67,6 +78,7 @@ void Widget::moveAll()
     }
     if(!is_alive()){
         delete ui;
+        stop();
     }
     this->repaint();
 }
